@@ -1,10 +1,12 @@
 import { addUserAddress, deleteUserAddress, deleteUserProfileImage, getUser, getUserAddresses, toggleUserStatus, updateUserAddress, updateUserDetails } from "../services/user.service.js";
 import { errorResponse, successResponse } from "../utils/response.js";
 
+const isProduction = process.env.NODE_ENV === "production" || Boolean(process.env.CLIENT_URL);
+
 const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax"
 }
 
 const logout = async (req, res) => {

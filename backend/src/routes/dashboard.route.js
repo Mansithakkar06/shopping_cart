@@ -3,7 +3,7 @@ import { verifyJWT } from "../middlewares/auth.js"
 import { getDashboardData, getOrderById } from "../controllers/dashboard.controller.js"
 const router = express.Router()
 
-router.get("/getDashboardData", verifyJWT, getDashboardData)
-router.get("/getOrderById/:id", verifyJWT, getOrderById)
+router.get("/getDashboardData", getDashboardData)
+router.get("/getOrderById/:id", getOrderById)
 
 export default router
