@@ -2,7 +2,9 @@ import mongoose from "mongoose"
 
 export const connection = async () => {
     try {
-        const connect=await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.fkuvbcg.mongodb.net/${process.env.DB_NAME}`)
+        // const connect=await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.fkuvbcg.mongodb.net/${process.env.DB_NAME}`)
+
+        const connect=await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.aoyhl0x.mongodb.net/${process.env.DB_NAME}?appName=Cluster0`)
         console.log("database connected")
         return connect;
     } catch (error) {

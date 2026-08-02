@@ -7,10 +7,12 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import { handleWebhook } from "./controllers/payment.controller.js"
 
+import { syncRegistry } from "./services/registry.service.js"
+
 const app = express()
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true
 }))
 
@@ -20,10 +22,12 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("uploads"))
+app.use("/uploads", express.static("uploads"))
 app.use(cookieParser())
 
 const connect = async () => {
     await connection()
+    await syncRegistry()
 
     app.listen(PORT, () => {
         console.log("server is listening on PORT: ", PORT)

@@ -20,7 +20,7 @@ function DynamicForm({ config, initialData, onSuccess, module, categories }) {
             }
             // Handle image preview for initial data
             if (initialData.image) {
-                setPreview(`http://localhost:3000/${initialData.image.replace('uploads/', '')}`);
+                setPreview(`http://localhost:3000/${initialData.image.replace(/\\/g, '/').replace('uploads/', '')}`);
             }
         } else {
             reset({});

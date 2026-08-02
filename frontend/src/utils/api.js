@@ -2,8 +2,10 @@ import axios from "axios"
 import { store } from "../store/store"
 import { logoutUser } from "../features/AuthSlice"
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+
 export const api = axios.create({
-    baseURL: "http://localhost:3000/api/v1",
+    baseURL: BASE_URL,
     withCredentials: true
 })
 
@@ -40,7 +42,7 @@ api.interceptors.response.use(
             try {
                 // Attempt to refresh the token
                 await axios.post(
-                    "http://localhost:3000/api/v1/auth/refreshToken",
+                    `${BASE_URL}/auth/refreshToken`,
                     {},
                     { withCredentials: true }
                 );

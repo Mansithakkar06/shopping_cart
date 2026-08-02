@@ -137,7 +137,7 @@ function DynamicTable({ config, data, onEdit, onDelete, onView, onToggleStatus }
                                     <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white shadow-inner">
                                         {item[imageField.name] ? (
                                             <img
-                                                src={`http://localhost:3000/${item[imageField.name].replace('uploads/', '')}`}
+                                                src={`http://localhost:3000/${item[imageField.name].replace(/\\/g, '/').replace('uploads/', '')}`}
                                                 alt=""
                                                 className="w-full h-full object-contain rounded-lg mix-blend-multiply"
                                             />

@@ -114,19 +114,51 @@ function Checkout() {
 
             const fullAddressString = `${selectedAddress.addressLine}, ${selectedAddress.city}, ${selectedAddress.state} - ${selectedAddress.pincode}`;
 
-            const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(fullAddressString)}&key=b51ae248712348dba144320373413c01`)
-            const data = await response.json()
-            let cords
-            cords = data.results[0]?.geometry
+            let cords;
+            try {
+                // 1. Primary lookup with full address via OpenStreetMap (Free, No API Key Required)
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(fullAddressString)}&format=json&limit=1`, {
+                    headers: { 'User-Agent': 'ShoppyMart/1.0' }
+                });
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    cords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+                }
+            } catch (err) {
+                console.warn("Full address geocoding failed:", err);
+            }
+
+            // 2. Secondary lookup with City, State, Pincode
+            if (!cords) {
+                try {
+                    const fallbackAddress = `${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}`;
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(fallbackAddress)}&format=json&limit=1`, {
+                        headers: { 'User-Agent': 'ShoppyMart/1.0' }
+                    });
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        cords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+                    }
+                } catch (err) {
+                    console.warn("Fallback geocoding failed:", err);
+                }
+            }
+
+            // 3. Default fallback if geocoding service is unreachable
+            if (!cords) {
+                cords = { lat: 20.5937, lng: 78.9629 };
+            }
+
             if (cords) {
-                const paymentIntent = await api.post("/payment/create-payment-intent", {
-                    total: totalPrice,
-                    cartId: cartId
-                })
-                let res
+                let res;
                 if (selectedOpt === "card") {
+                    const paymentIntent = await api.post("/payment/create-payment-intent", {
+                        total: totalPrice,
+                        cartId: cartId
+                    });
                     if (!stripe || !elements) {
                         toast.error("Stripe not loaded yet");
+                        setLoading(false);
                         return;
                     }
                     const result = await stripe.confirmCardPayment(paymentIntent.data.data, {
@@ -145,15 +177,15 @@ function Checkout() {
                         setLoading(false);
                         return;
                     }
-                    const status = result.paymentIntent.status === "succeeded" ? "completed" : "cancelled"
+                    const status = result.paymentIntent.status === "succeeded" ? "completed" : "cancelled";
                     res = await api.post("/carts/updateCart", {
                         paymentMethod: selectedOpt,
                         paymentStatus: status,
-                        orderStatus: "draft",
+                        orderStatus: status === "completed" ? "completed" : "draft",
                         lat: cords.lat,
                         lng: cords.lng,
                         total: totalPrice,
-                        shippingAddress: selectedAddress // Optional: pass address object if backend supports it
+                        shippingAddress: selectedAddress
                     });
                 }
                 else {

@@ -61,7 +61,11 @@ export const createData = async (req, res) => {
     try {
         const { modelName } = req.params;
         const Model = modelMap[modelName];
-        const data = await Model.create(req.body);
+        const payload = { ...req.body };
+        if (req.file) {
+            payload.image = req.file.path.replace(/\\/g, "/");
+        }
+        const data = await Model.create(payload);
         return res.status(201).json({
             success: true,
             data
@@ -80,9 +84,13 @@ export const updateData = async (req, res) => {
     try {
         const { modelName, id } = req.params;
         const Model = modelMap[modelName];
+        const payload = { ...req.body };
+        if (req.file) {
+            payload.image = req.file.path.replace(/\\/g, "/");
+        }
         const data = await Model.findByIdAndUpdate(
             id,
-            req.body,
+            payload,
             {
                 new: true
             }
