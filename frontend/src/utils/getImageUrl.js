@@ -12,5 +12,5 @@ export const getImageUrl = (imagePath) => {
     // Remove '/api/v1' suffix to get server root URL
     const serverRoot = rawApiUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
     
-    return `${serverRoot}/${cleanPath}`;
+    return `${serverRoot}/uploads/${cleanPath}`;
 };

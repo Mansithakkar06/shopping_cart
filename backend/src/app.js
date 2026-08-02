@@ -32,6 +32,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("uploads"))
 app.use("/uploads", express.static("uploads"))
+app.use("/api/v1/uploads", express.static("uploads"))
 app.use(cookieParser())
 
 const connect = async () => {
