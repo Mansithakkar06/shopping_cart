@@ -15,6 +15,7 @@ import { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { toast } from 'react-toastify'
 import { clearCart } from '../../features/CartSlice'
+import { getImageUrl } from '../../utils/getImageUrl'
 
 const steps = ['Review Order', 'Payment', 'Confirm']
 
@@ -383,7 +384,7 @@ function Checkout() {
                                     {cartItems?.map((item) => (
                                         <div key={item.product?._id || item.product} className='p-3 md:p-4 rounded-2xl md:rounded-3xl bg-white/02 border border-gray-700 flex gap-4 md:gap-6 items-center hover:border-white/10 transition-colors'>
                                             <div className='w-16 h-16 md:w-20 md:h-20 bg-white rounded-xl md:rounded-2xl p-2 md:p-3 shrink-0 group overflow-hidden'>
-                                                <img src={`http://localhost:3000/${item.product?.image?.replace('uploads/', '')}`} alt={item.product?.title} className='w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500' />
+                                                <img src={getImageUrl(item.product?.image)} alt={item.product?.title} className='w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500' />
                                             </div>
                                             <div className='flex-1 min-w-0'>
                                                 <div className='flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-4 mb-2'>

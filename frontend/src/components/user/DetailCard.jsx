@@ -5,6 +5,7 @@ import { addTocart, decreaceQty, increaceQty, removeFromCart, updateLocalStorage
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faShieldHalved, faTruckFast, faCircleCheck, faStar } from '@fortawesome/free-solid-svg-icons';
 import { api } from '../../utils/api';
+import { getImageUrl } from '../../utils/getImageUrl';
 import { fetchDraftCart } from '../../store/cart/cartApi';
 
 function DetailCard({ product }) {
@@ -124,7 +125,7 @@ function DetailCard({ product }) {
             <div className='lg:w-1/2 bg-white flex items-center justify-center min-h-[360px] p-10 relative'>
                 <div className='relative w-full aspect-square max-w-[380px] group'>
                     <img
-                        src={`http://localhost:3000/${(product.image).replace('uploads/', '')}`}
+                        src={getImageUrl(product.image)}
                         alt={product.title}
                         className='w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700'
                     />

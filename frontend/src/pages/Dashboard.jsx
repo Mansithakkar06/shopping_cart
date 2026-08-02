@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { getImageUrl } from '../utils/getImageUrl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faChartLine,
@@ -151,7 +152,7 @@ function Dashboard() {
                     <div className="flex flex-col gap-4 flex-1">
                         {products.filter(p => p.stock < 10).map((prod) => (
                             <div key={prod._id} className="flex items-center gap-4 p-4 rounded-2xl bg-white/03 border border-white/05 hover:bg-white/05 transition-all group">
-                                <img src={`http://localhost:3000/${prod.image?.replace('uploads/', '')}`} className="w-10 h-10 rounded-lg object-cover" />
+                                <img src={getImageUrl(prod.image)} className="w-10 h-10 rounded-lg object-cover" />
                                 <div className="flex-1 min-w-0">
                                     <h4 className="text-white font-bold text-xs truncate uppercase tracking-tight">{prod.title}</h4>
                                     <p className="text-orange-400 text-[10px] font-black uppercase tracking-widest">{prod.stock} in stock</p>
@@ -200,7 +201,7 @@ function Dashboard() {
                                     <td className="px-8 py-4">
                                         <div className="flex items-center gap-4 text-left">
                                             <div className="w-12 h-12 rounded-xl overflow-hidden glass border border-white/10 p-1 flex-shrink-0 group-hover:scale-105 transition-transform">
-                                                <img src={`http://localhost:3000/${product.image?.replace('uploads/', '')}`} alt={product.title} className="w-full h-full object-cover rounded-lg" />
+                                                <img src={getImageUrl(product.image)} alt={product.title} className="w-full h-full object-cover rounded-lg" />
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="text-white font-bold text-sm tracking-tight">{product.name}</span>

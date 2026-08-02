@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../utils/api';
+import { getImageUrl } from '../../utils/getImageUrl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUser, faEnvelope, faPhone, faMapMarkerAlt, faCalendarAlt, faCreditCard, faTruck, faBox, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import { Oval } from 'react-loader-spinner';
@@ -96,7 +97,7 @@ function AdminOrderDetail() {
                                     <div className="flex items-center gap-4 flex-1 min-w-0">
                                         <div className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl overflow-hidden bg-slate-900 shrink-0 border border-white/05">
                                             <img
-                                                src={item.product?.image ? `http://localhost:3000/${item.product.image.replace('uploads/', '')}` : '/placeholder-product.png'}
+                                                src={item.product?.image ? getImageUrl(item.product.image) : '/placeholder-product.png'}
                                                 alt={item.product?.title}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
@@ -189,7 +190,7 @@ function AdminOrderDetail() {
                                 <div className="w-16 h-16 rounded-2xl glass border border-indigo-500/20 bg-indigo-500/05 flex items-center justify-center overflow-hidden">
                                     {order.user?.image ? (
                                         <img
-                                            src={`http://localhost:3000/${order.user.image?.replace('uploads/', '')}`}
+                                            src={getImageUrl(order.user.image)}
                                             alt={order.user.name}
                                             className="w-full h-full object-cover"
                                         />

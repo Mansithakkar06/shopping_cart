@@ -5,6 +5,7 @@ import { faBars, faSignOut, faSignOutAlt, faUser } from '@fortawesome/free-solid
 import { logoutUser } from '../../features/AuthSlice';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import { getImageUrl } from '../../utils/getImageUrl';
 
 function Header({ setIsMobileMenuOpen }) {
     const user = useSelector(state => state.auth.user);
@@ -46,7 +47,7 @@ function Header({ setIsMobileMenuOpen }) {
                         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 overflow-hidden flex items-center justify-center group-hover:scale-105 group-hover:border-indigo-500 transition-all">
                             {user?.image ? (
                                 <img
-                                    src={`http://localhost:3000/${user.image?.replace('uploads/', '')}`}
+                                    src={getImageUrl(user.image)}
                                     alt={user.name}
                                     className="w-full h-full object-cover"
                                 />

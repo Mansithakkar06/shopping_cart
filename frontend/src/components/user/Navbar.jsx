@@ -6,6 +6,7 @@ import PopUp from './Popup';
 import { useDispatch, useSelector } from 'react-redux';
 import Cart from '../../pages/user/Cart';
 import { api } from '../../utils/api';
+import { getImageUrl } from '../../utils/getImageUrl';
 import { logoutUser } from '../../features/AuthSlice';
 import { toast } from 'react-toastify'
 import { setLoggedinUser } from '../../features/AuthSlice';
@@ -163,7 +164,7 @@ function Navbar() {
                   <button className='flex items-center gap-3 p-1 pl-1 pr-3 hover:bg-white/5 rounded-full hover:border-white/10 transition-all duration-300 group' onClick={() => setOpenUserMenu(prev => !prev)}>
                     <div className='w-9 h-9 rounded-full overflow-hidden flex items-center justify-center bg-indigo-500/10 border border-indigo-500/30 group-hover:border-indigo-500/60 transition-all duration-500 shadow-lg'>
                       {user?.image ? (
-                        <img src={`http://localhost:3000/${user.image?.replace('uploads/', '')}`} alt="profile" className='w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500' />
+                        <img src={getImageUrl(user.image)} alt="profile" className='w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500' />
                       ) : (
                         <span className="text-indigo-400 font-bold text-xs uppercase group-hover:text-white transition-colors">{user.name?.charAt(0)}</span>
                       )}
@@ -257,7 +258,7 @@ function Navbar() {
                 <div className="px-4 py-2 mb-2 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full border border-indigo-500/30 overflow-hidden flex items-center justify-center bg-indigo-500/10">
                     {user?.image ? (
-                      <img src={`http://localhost:3000/${user.image?.replace('uploads/', '')}`} alt="profile" className='w-full h-full object-cover' />
+                      <img src={getImageUrl(user.image)} alt="profile" className='w-full h-full object-cover' />
                     ) : (
                       <span className="text-indigo-400 font-bold text-sm uppercase">{user.name?.charAt(0)}</span>
                     )}

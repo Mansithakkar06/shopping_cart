@@ -1,4 +1,5 @@
 import React from 'react';
+import { getImageUrl } from '../../utils/getImageUrl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faPhone, faShieldAlt, faCircle, faCalendarAlt, faIdBadge } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,7 +20,7 @@ function UserDetails({ user }) {
                 <div className="w-24 h-24 rounded-3xl glass border border-white/10 flex items-center justify-center overflow-hidden bg-slate-900 shadow-2xl relative group">
                     {user.image ? (
                         <img
-                            src={`http://localhost:3000/${user.image.replace('uploads/', '')}`}
+                            src={getImageUrl(user.image)}
                             alt={user.name}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useOutletContext } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { api } from '../../utils/api'
+import { getImageUrl } from '../../utils/getImageUrl'
 import FormField from '../../components/admin/FormField'
 
 function ProductForm({ popup, setPopup, setRefresh }) {
@@ -42,7 +43,7 @@ function ProductForm({ popup, setPopup, setRefresh }) {
                     setValue('category', product.category._id)
                 }
                 if (product.image) {
-                    setPreview(`http://localhost:3000/${product.image.replace('uploads/', '')}`)
+                    setPreview(getImageUrl(product.image))
                 }
             }
         }

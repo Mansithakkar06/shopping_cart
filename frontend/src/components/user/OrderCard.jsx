@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { api } from '../../utils/api'
+import { getImageUrl } from '../../utils/getImageUrl'
 
 function OrderCard({ orderitem }) {
     return (
@@ -11,7 +12,7 @@ function OrderCard({ orderitem }) {
                 return (
                     <div className='flex gap-6 items-center group' key={item._id}>
                         <div className='w-20 h-20 bg-white rounded-2xl p-3 flex-shrink-0 border border-white/10'>
-                            <img src={`http://localhost:3000/${product.image?.replace('uploads/', '')}`} alt={product.title} className='w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500' />
+                            <img src={getImageUrl(product.image)} alt={product.title} className='w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500' />
                         </div>
                         <div className='flex-1 min-w-0'>
                             <h3 className='font-bold text-white truncate group-hover:text-indigo-400 transition-colors'>{product.title}</h3>

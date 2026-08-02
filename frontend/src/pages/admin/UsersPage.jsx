@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import FilterBar from '../../components/admin/FilterBar';
 import Table from '../../components/admin/Table';
+import { getImageUrl } from '../../utils/getImageUrl';
 import { api } from '../../utils/api.js';
 import { Oval } from 'react-loader-spinner';
 import Pagination from '../../components/admin/Pagination';
@@ -92,7 +93,7 @@ function UsersPage() {
                                         <div className="w-10 h-10 rounded-full bg-indigo-500/10 border border-white/05 overflow-hidden flex items-center justify-center shrink-0">
                                             {user.image ? (
                                                 <img
-                                                    src={`http://localhost:3000/${user.image?.replace('uploads/', '')}`}
+                                                    src={getImageUrl(user.image)}
                                                     alt={user.name}
                                                     className="w-full h-full object-cover"
                                                 />
@@ -190,7 +191,7 @@ function UsersPage() {
                             <div className="w-20 h-20 rounded-3xl bg-indigo-500/10 border border-white/05 overflow-hidden flex items-center justify-center shrink-0">
                                 {popup.data.image ? (
                                     <img
-                                        src={`http://localhost:3000/${popup.data.image?.replace('uploads/', '')}`}
+                                        src={getImageUrl(popup.data.image)}
                                         alt={popup.data.name}
                                         className="w-full h-full object-cover"
                                     />

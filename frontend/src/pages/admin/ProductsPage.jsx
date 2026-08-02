@@ -8,6 +8,7 @@ import PopUp from '../../components/user/Popup';
 import Table from '../../components/admin/Table';
 import Pagination from '../../components/admin/Pagination';
 import ProductForm from './ProductForm';
+import { getImageUrl } from '../../utils/getImageUrl';
 import DeleteConfirmation from './DeleteConfirmation';
 
 function ProductsPage() {
@@ -92,7 +93,7 @@ function ProductsPage() {
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 p-1 flex-shrink-0 bg-white">
                                             <img
-                                                src={`http://localhost:3000/${product.image?.replace('uploads/', '')}`}
+                                                src={getImageUrl(product.image)}
                                                 alt={product.title}
                                                 className="w-full h-full object-contain rounded-lg mix-blend-multiply"
                                             />

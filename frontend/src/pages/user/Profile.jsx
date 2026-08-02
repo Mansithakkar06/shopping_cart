@@ -8,6 +8,7 @@ import {
     faBriefcase, faMapPin, faCheckCircle, faPhone, faCompass, faXmark
 } from '@fortawesome/free-solid-svg-icons'
 import { api } from '../../utils/api'
+import { getImageUrl } from '../../utils/getImageUrl'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoggedinUser } from '../../features/AuthSlice'
@@ -250,7 +251,7 @@ function Profile() {
                                             previewUrl ? (
                                                 <img src={previewUrl} alt="preview" className='w-full h-full object-cover' />
                                             ) : user?.image ? (
-                                                <img src={`http://localhost:3000/${user.image?.replace('uploads/', '')}`} alt="profile image" className='w-full h-full object-cover' />
+                                                <img src={getImageUrl(user.image)} alt="profile image" className='w-full h-full object-cover' />
                                             ) : (
                                                 <span className="text-6xl font-black text-indigo-400 uppercase">{user.name?.charAt(0)}</span>
                                             )
