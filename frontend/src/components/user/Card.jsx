@@ -7,6 +7,7 @@ import DetailCard from './DetailCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus, faInfoCircle, faStar, faHeart } from '@fortawesome/free-solid-svg-icons'
 import { api } from '../../utils/api'
+import { getImageUrl } from '../../utils/getImageUrl'
 import { fetchDraftCart } from '../../store/cart/cartApi'
 
 function Card({ product, favourites, onRemoveFavourite }) {
@@ -186,7 +187,7 @@ function Card({ product, favourites, onRemoveFavourite }) {
             {/* Image */}
             <div className='relative aspect-square mb-5 rounded-2xl overflow-hidden bg-white p-6 product-card-image'>
                 <img
-                    src={`http://localhost:3000/${product.image?.replace('uploads/', '')}`}
+                    src={getImageUrl(product.image)}
                     alt={product.title}
                     className='w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110'
                 />

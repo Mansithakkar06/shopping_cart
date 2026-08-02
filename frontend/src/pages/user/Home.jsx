@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faTruck, faShieldHalved, faHeadset, faTag } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router';
 import { api } from '../../utils/api';
+import { getImageUrl } from '../../utils/getImageUrl';
 import { toast } from 'react-toastify';
 import { Oval } from 'react-loader-spinner';
 
@@ -162,7 +163,7 @@ function Home() {
             {featuredCategories.map((category) => {
               const categoryproducts = products.filter(product => product.category?.title === category);
               const rawImage = categoryproducts[1]?.image || categoryproducts[0]?.image;
-              const displayImage = rawImage ? `http://localhost:3000/${rawImage.replace('uploads/', '')}` : '';
+              const displayImage = rawImage ? getImageUrl(rawImage) : '';
               return (
                 <CategoryCard key={category} category={category} image={displayImage} count={categoryproducts.length} />
               )

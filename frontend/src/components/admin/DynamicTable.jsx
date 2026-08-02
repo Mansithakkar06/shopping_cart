@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import Table from './Table';
+import { getImageUrl } from '../../utils/getImageUrl';
 
 function DynamicTable({ config, data, onEdit, onDelete, onView, onToggleStatus }) {
     if (!config || !data) return null;
@@ -137,7 +138,7 @@ function DynamicTable({ config, data, onEdit, onDelete, onView, onToggleStatus }
                                     <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-white shadow-inner">
                                         {item[imageField.name] ? (
                                             <img
-                                                src={`http://localhost:3000/${item[imageField.name].replace(/\\/g, '/').replace('uploads/', '')}`}
+                                                src={getImageUrl(item[imageField.name])}
                                                 alt=""
                                                 className="w-full h-full object-contain rounded-lg mix-blend-multiply"
                                             />

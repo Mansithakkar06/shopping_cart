@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { api } from '../../utils/api';
 import FormField from './FormField';
+import { getImageUrl } from '../../utils/getImageUrl';
 
 function DynamicForm({ config, initialData, onSuccess, module, categories }) {
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch, getValues } = useForm();
@@ -20,7 +21,7 @@ function DynamicForm({ config, initialData, onSuccess, module, categories }) {
             }
             // Handle image preview for initial data
             if (initialData.image) {
-                setPreview(`http://localhost:3000/${initialData.image.replace(/\\/g, '/').replace('uploads/', '')}`);
+                setPreview(getImageUrl(initialData.image));
             }
         } else {
             reset({});

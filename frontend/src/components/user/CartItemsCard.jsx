@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart, increaceQty, decreaceQty, updateLocalStorage } from '../../features/CartSlice'
 import { api } from '../../utils/api'
 import { toast } from 'react-toastify'
+import { getImageUrl } from '../../utils/getImageUrl'
 
 function CartItemsCard({ item, cartItems }) {
     const cartItem = cartItems.find(ci => (ci.product?._id || ci.product) === item._id)
@@ -112,7 +113,7 @@ function CartItemsCard({ item, cartItems }) {
                 {/* Image */}
                 <div className='w-20 h-20 bg-white rounded-xl p-2.5 flex-shrink-0 overflow-hidden'>
                     <img
-                        src={`http://localhost:3000/${item.image?.replace('uploads/', '')}`}
+                        src={getImageUrl(item.image)}
                         alt={item.title}
                         className='w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500'
                     />
