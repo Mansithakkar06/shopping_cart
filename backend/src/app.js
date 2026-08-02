@@ -12,7 +12,16 @@ import { syncRegistry } from "./services/registry.service.js"
 const app = express()
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, "") : "";
+        const reqOrigin = origin.replace(/\/$/, "");
+        
+        if (!clientUrl || reqOrigin === clientUrl || reqOrigin.includes("localhost") || reqOrigin.includes("vercel.app")) {
+            return callback(null, true);
+        }
+        return callback(null, true);
+    },
     credentials: true
 }))
 
