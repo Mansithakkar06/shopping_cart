@@ -25,5 +25,5 @@ yarn-debug.log*
 .idea/
 
 # Backend Uploads (Optional, but recommended)
-backend/uploads/*
-!backend/uploads/.gitkeep
+# backend/uploads/*
+# !backend/uploads/.gitkeep
