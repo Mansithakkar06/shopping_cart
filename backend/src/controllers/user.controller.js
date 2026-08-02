@@ -1,9 +1,15 @@
 import { addUserAddress, deleteUserAddress, deleteUserProfileImage, getUser, getUserAddresses, toggleUserStatus, updateUserAddress, updateUserDetails } from "../services/user.service.js";
 import { errorResponse, successResponse } from "../utils/response.js";
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+}
+
 const logout = async (req, res) => {
     try {
-        res.clearCookie("accessToken").clearCookie("refreshToken")
+        res.clearCookie("accessToken", cookieOptions).clearCookie("refreshToken", cookieOptions)
         return successResponse(res, 200, "loggedout successfully!!")
     } catch (error) {
         return errorResponse(res, 400, "error in logout", error)

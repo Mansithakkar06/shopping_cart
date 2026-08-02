@@ -10,6 +10,7 @@ import { handleWebhook } from "./controllers/payment.controller.js"
 import { syncRegistry } from "./services/registry.service.js"
 
 const app = express()
+app.set("trust proxy", 1)
 
 app.use(cors({
     origin: (origin, callback) => {
