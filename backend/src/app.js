@@ -31,8 +31,8 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("uploads"))
-app.use("/uploads", express.static("uploads"))
-app.use("/api/v1/uploads", express.static("uploads"))
+app.use("/uploads", express.static("uploads"), (req, res) => res.status(404).send("Image not found"))
+app.use("/api/v1/uploads", express.static("uploads"), (req, res) => res.status(404).send("Image not found"))
 app.use(cookieParser())
 
 const connect = async () => {
@@ -65,12 +65,12 @@ app.use("/api/v1/carts", cartRouter)
 //partially auth
 app.use("/api/v1/products", productRouter)
 app.use("/api/v1/categories", categoryRouter)
-//auth routes
-app.use(verifyJWT)
-app.use("/api/v1/users", userRouter)
-app.use("/api/v1/orders", orderRouter)
-app.use("/api/v1/dashboard", dashboardRouter)
-app.use("/api/v1/favourites", favouriteRouter)
-app.use("/api/v1/payment", paymentRouter)
 app.use("/api/v1/registry", registryRoutes)
 app.use("/api/v1/admin", dynamicRoutes)
+
+//auth routes
+app.use("/api/v1/users", verifyJWT, userRouter)
+app.use("/api/v1/orders", verifyJWT, orderRouter)
+app.use("/api/v1/dashboard", verifyJWT, dashboardRouter)
+app.use("/api/v1/favourites", verifyJWT, favouriteRouter)
+app.use("/api/v1/payment", verifyJWT, paymentRouter)
