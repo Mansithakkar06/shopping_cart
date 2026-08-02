@@ -17,10 +17,15 @@ const register = async (req, res) => {
     try {
         const response = await registerUser(req.body)
         if (response.status === 201) {
+            const userData = {
+                ...response.createdUser.toObject(),
+                accessToken: response.accessToken,
+                refreshToken: response.refreshToken
+            };
             return res.status(response.status)
                 .cookie("refreshToken", response.refreshToken, options)
                 .cookie("accessToken", response.accessToken, options)
-                .json({ message: response.message, data: response.createdUser })
+                .json({ message: response.message, data: userData })
         }
         else {
             return errorResponse(res, response.status, response.message)
@@ -39,10 +44,15 @@ const login = async (req, res) => {
     try {
         const response = await loginUser(req.body)
         if (response.status === 200) {
+            const userData = {
+                ...response.finduser.toObject(),
+                accessToken: response.accessToken,
+                refreshToken: response.refreshToken
+            };
             return res.status(response.status)
                 .cookie("refreshToken", response.refreshToken, options)
                 .cookie("accessToken", response.accessToken, options)
-                .json({ message: response.message, data: response.finduser })
+                .json({ message: response.message, data: userData })
         }
         else {
             return errorResponse(res, response.status, response.message)
@@ -54,7 +64,7 @@ const login = async (req, res) => {
 
 const refreshToken = async (req, res) => {
     try {
-        const token = req.cookies.refreshToken
+        const token = req.cookies?.refreshToken || req.body?.refreshToken || req.headers?.authorization?.replace(/^Bearer\s+/i, "");
         if(!token){
             return errorResponse(res,401,"no refresh token token!!")
         }        
@@ -63,7 +73,7 @@ const refreshToken = async (req, res) => {
             res.status(response.status)
                 .cookie("refreshToken", response.refreshToken, options)
                 .cookie("accessToken", response.accessToken, options)
-                .json({ message: response.message })
+                .json({ message: response.message, accessToken: response.accessToken, refreshToken: response.refreshToken })
         }
         else {
             return errorResponse(res, response.status, response.message)

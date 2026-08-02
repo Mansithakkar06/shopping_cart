@@ -9,53 +9,60 @@ export const api = axios.create({
     withCredentials: true
 })
 
-// Add a response interceptor
-api.interceptors.response.use(
-    // res => res,
-    // async err => {
-    //     if (err.response.status === 401) {
-    //         const newToken =  await axios.post(
-    //                 "http://localhost:3000/api/v1/auth/refreshToken",
-    //                 {},
-    //                 { withCredentials: true }
-    //             );
+// Request Interceptor: Automatically attach Bearer accessToken if present in localStorage
+api.interceptors.request.use(
+    (config) => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user") || "null");
+            if (user?.accessToken) {
+                config.headers.Authorization = `Bearer ${user.accessToken}`;
+            }
+        } catch (e) {
+            // Ignore parse errors
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-    //         err.config.headers.Authorization = `Bearer ${newToken}`;
-    //         return api(err.config); // retry request
-    //     }
-    //     return Promise.reject(err);
-    // }
+// Response Interceptor: Handle 401 token refresh
+api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
-        // If the error is 401 and not already retrying
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            // Check if user is supposed to be logged in (via localStorage)
-            const user = JSON.parse(localStorage.getItem("user"));
+            const user = JSON.parse(localStorage.getItem("user") || "null");
             if (!user) {
                 return Promise.reject(error);
             }
 
             try {
-                // Attempt to refresh the token
-                await axios.post(
+                const refreshRes = await axios.post(
                     `${BASE_URL}/auth/refreshToken`,
-                    {},
+                    { refreshToken: user.refreshToken },
                     { withCredentials: true }
                 );
 
-                // If successful, retry the original request
-                return api(originalRequest);
+                const newAccessToken = refreshRes.data?.accessToken;
+                const newRefreshToken = refreshRes.data?.refreshToken;
+
+                if (newAccessToken) {
+                    const updatedUser = {
+                        ...user,
+                        accessToken: newAccessToken,
+                        refreshToken: newRefreshToken || user.refreshToken
+                    };
+                    localStorage.setItem("user", JSON.stringify(updatedUser));
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return api(originalRequest);
+                }
             } catch (refreshError) {
-                // If refresh fails (token expired, missing, or mismatched), 
-                // clear storage and update Redux state immediately so the UI (Navbar) updates
                 localStorage.removeItem("user");
                 store.dispatch(logoutUser());
                 
-                // If it's a "no refresh token" error on page load, mark it as silent
                 if (refreshError.response?.data?.message === "no refresh token token!!") {
                     refreshError.isSilent = true;
                 }
@@ -66,5 +73,4 @@ api.interceptors.response.use(
 
         return Promise.reject(error);
     }
-
 );
