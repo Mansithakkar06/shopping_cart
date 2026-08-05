@@ -63,7 +63,7 @@ export const createData = async (req, res) => {
         const Model = modelMap[modelName];
         const payload = { ...req.body };
         if (req.file) {
-            payload.image = req.file.path.replace(/\\/g, "/");
+            payload.image = req.file.path;
         }
         const data = await Model.create(payload);
         return res.status(201).json({
@@ -86,7 +86,7 @@ export const updateData = async (req, res) => {
         const Model = modelMap[modelName];
         const payload = { ...req.body };
         if (req.file) {
-            payload.image = req.file.path.replace(/\\/g, "/");
+            payload.image = req.file.path;
         }
         const data = await Model.findByIdAndUpdate(
             id,

@@ -12,6 +12,7 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
+    "start": "node src/app.js",
     "server": "nodemon src/app.js",
     "dev": "concurrently \"npm run server\" \"stripe listen --forward-to localhost:3000/api/v1/payment/webhook\""
   },

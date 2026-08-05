@@ -105,12 +105,12 @@ const deletProductFromCart = async (data) => {
 }
 
 const getUserCart = async (data) => {
-    if (!mongoose.Types.ObjectId.isValid(data.userId)) {
-        return { status: 400, message: "invalid id!!" }
+    if (!data.userId || !mongoose.Types.ObjectId.isValid(data.userId)) {
+        return { status: 200, message: "empty cart", cart: data.status === 'draft' ? { items: [] } : [] }
     }
     const user = await User.findById(data.userId);
     if (!user) {
-        return { status: 404, message: "user not found!!" }
+        return { status: 200, message: "empty cart", cart: data.status === 'draft' ? { items: [] } : [] }
     }
     const query = {
         $and: [
