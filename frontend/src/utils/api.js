@@ -2,7 +2,9 @@ import axios from "axios"
 import { store } from "../store/store"
 import { logoutUser } from "../features/AuthSlice"
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+const rawUrl = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+const cleanUrl = rawUrl.replace(/\/$/, "");
+const BASE_URL = cleanUrl.endsWith("/api/v1") ? cleanUrl : `${cleanUrl}/api/v1`;
 
 export const api = axios.create({
     baseURL: BASE_URL,
