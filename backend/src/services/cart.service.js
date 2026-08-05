@@ -134,10 +134,9 @@ const mergeGuestCart = async (data) => {
             { user: data.userId },
             { orderStatus: "draft" }
         ]
-    }
-    )
-    const total = data.items.reduce((total, item) => {
-        return total + (item.price * item.qty)
+    })
+    const total = (data.items || []).reduce((total, item) => {
+        return total + (Number(item.price) * Number(item.qty))
     }, 0)
     if (!cart) {
         cart = await Cart.create({
@@ -149,23 +148,28 @@ const mergeGuestCart = async (data) => {
         })
     }
     else {
-        data.items.forEach((cartitem) => {
-            const existingItem = cart.items.find(
-                item => item.product.equals(new mongoose.Types.ObjectId(cartitem.product))
-            )
+        (data.items || []).forEach((cartitem) => {
+            const existingItem = cart.items.find(item => {
+                if (!item || !item.product) return false;
+                const prodId = item.product._id ? item.product._id.toString() : item.product.toString();
+                return prodId === String(cartitem.product);
+            })
             if (existingItem) {
-                existingItem.qty += cartitem.qty
+                existingItem.qty += Number(cartitem.qty)
             }
             else {
-                cart.items.push(cartitem)
+                cart.items.push({
+                    product: cartitem.product,
+                    qty: Number(cartitem.qty),
+                    price: Number(cartitem.price)
+                })
             }
         })
     }
-    cart.total = cart.items.reduce((acc, item) => acc + item.qty * item.price, 0)
+    cart.total = cart.items.reduce((acc, item) => acc + (Number(item.qty) * Number(item.price)), 0)
     await cart.save({ validateBeforeSave: false })
     await cart.populate({ path: 'items.product', populate: { path: 'category' } })
     return { status: 200, message: "cart", cart: cart }
-
 }
 
 const updateCart = async (data) => {

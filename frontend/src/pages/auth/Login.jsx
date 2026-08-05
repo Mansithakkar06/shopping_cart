@@ -27,16 +27,20 @@ function Login() {
                 })
                 dispatch(setLoggedinUser(res.data.data))
                 if (guestCart && guestCart.length > 0) {
-                    const cartPayload = guestCart.map(item => ({
-                        product: item.product?._id || item.product,
-                        qty: item.qty,
-                        price: item.price
-                    }))
-                    const res = await api.post("/carts/mergeCart", {
-                        items: cartPayload
-                    })
-                    if (res.status === 200 || res.status === 201) {
-                        dispatch(clearCart())
+                    try {
+                        const cartPayload = guestCart.map(item => ({
+                            product: String(item.product?._id || item.product),
+                            qty: Number(item.qty || 1),
+                            price: Number(item.price || 0)
+                        }))
+                        const mergeRes = await api.post("/carts/mergeCart", {
+                            items: cartPayload
+                        })
+                        if (mergeRes.status === 200 || mergeRes.status === 201) {
+                            dispatch(clearCart())
+                        }
+                    } catch (mergeErr) {
+                        console.error("Cart merge error:", mergeErr)
                     }
                 }
                 const from = location.state?.from || (res.data.data.isAdmin ? "/admin/dashboard" : "/");
